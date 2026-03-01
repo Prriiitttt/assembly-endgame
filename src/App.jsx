@@ -7,9 +7,7 @@ export default function Hangman() {
 
   const [currentWord, setCurrentWord] = useState("react")
 
-  const letterElement = currentWord.split("").map((letter, index) => (
-    <span key={index}>{letter.toUpperCase()}</span>
-  ))
+  const alphabet = "abcdefghijklmnopqrstuvwxyz"
 
   const languageElements = languages.map((language) => {
     const styles = {
@@ -23,12 +21,21 @@ export default function Hangman() {
     );
   });
 
+  const letterElement = currentWord.split("").map((letter, index) => (
+    <span key={index}>{letter.toUpperCase()}</span>
+  ))
+
+  const alphabetChar = alphabet.split("").map((character, index) => (
+    <span key={index}>{character.toUpperCase()}</span>
+  ))
+
   return (
     <>
       <Header />
       <Status />
       <section className="language-chips">{languageElements}</section>
       <section className="word">{letterElement}</section>
+      <section className="keyboardWord">{alphabetChar}</section>
     </>
   );
 }
