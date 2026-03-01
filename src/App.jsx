@@ -1,9 +1,16 @@
 import { useState } from "react";
+import { languages } from "/src/languages";
 import Header from "./components/Header";
 import Status from "./components/Status";
-import { languages } from "/src/languages";
 
 export default function Hangman() {
+
+  const [currentWord, setCurrentWord] = useState("react")
+
+  const letterElement = currentWord.split("").map((letter, index) => (
+    <span key={index}>{letter.toUpperCase()}</span>
+  ))
+
   const languageElements = languages.map((language) => {
     const styles = {
       backgroundColor: language.backgroundColor,
@@ -21,18 +28,7 @@ export default function Hangman() {
       <Header />
       <Status />
       <section className="language-chips">{languageElements}</section>
+      <section className="word">{letterElement}</section>
     </>
   );
 }
-
-/**
- * Goal: Build out the main parts of our app
- *
- * Challenge: Create the language chips. Use the
- * `languages.js` file to pull in the array of
- * languages to use, which contains the language
- * name, background color, and text color.
- *
- * Hint for layout: use a flex container that can wrap
- * to layout the languages.
- */

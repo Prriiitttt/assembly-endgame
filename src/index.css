@@ -57,9 +57,27 @@ header > p {
     gap: 5px;
     justify-content: center;
     max-width: 352px;
+    margin-bottom: 36px;
 }
 
 span.chip {
     border-radius: 3px;
     padding: 4.5px;
+}
+
+section.word {
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+}
+
+.word > span {
+    height: 40px;
+    width: 40px;
+    font-size: 1.125rem;
+    border-bottom: 1px solid #F9F4DA;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #323232;
 }
