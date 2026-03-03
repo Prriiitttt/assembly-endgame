@@ -2,12 +2,14 @@ import { useState } from "react";
 import { languages } from "/src/languages";
 import Header from "./components/Header";
 import Status from "./components/Status";
+import clsx from "clsx";
 
 export default function Hangman() {
+  const alphabet = "abcdefghijklmnopqrstuvwxyz";
+  const [currentWord, setCurrentWord] = useState("react");
+  const [guessedLetters, setGuessedLetters] = useState("");
 
-  const [currentWord, setCurrentWord] = useState("react")
-
-  const alphabet = "abcdefghijklmnopqrstuvwxyz"
+  console.log(guessedLetters);
 
   const languageElements = languages.map((language) => {
     const styles = {
@@ -21,13 +23,35 @@ export default function Hangman() {
     );
   });
 
-  const letterElement = currentWord.split("").map((letter, index) => (
-    <span key={index}>{letter.toUpperCase()}</span>
-  ))
+  const letterElement = currentWord
+    .split("")
+    .map((letter, index) => <span key={index}>{letter.toUpperCase()}</span>);
 
-  const keyboardElements = alphabet.split("").map((letter) => (
-    <button key={letter}>{letter.toUpperCase()}</button>
-  ))
+  const keyboardElements = alphabet.split("").map((letter) => {
+    const isGuessed = guessedLetters.includes(letter);
+    const isCorrect = isGuessed && currentWord.includes(letter);
+    const isWrong = isGuessed && !isCorrect;
+
+    return (
+      <button
+        onClick={() => addGuessedLetter(letter)}
+        key={letter}
+        className={clsx("keyboard-button", {
+          guessed: isGuessed,
+          correct: isCorrect,
+          wrong: isWrong,
+        })}
+      >
+        {letter.toUpperCase()}
+      </button>
+    );
+  });
+
+  function addGuessedLetter(letter) {
+    setGuessedLetters((prevLetters) =>
+      prevLetters.includes(letter) ? prevLetters : [...prevLetters, letter],
+    );
+  }
 
   return (
     <main className="container">
@@ -36,6 +60,7 @@ export default function Hangman() {
       <section className="language-chips">{languageElements}</section>
       <section className="word">{letterElement}</section>
       <section className="keyboardWord">{keyboardElements}</section>
+      <button className="new-game">New Game</button>
     </main>
   );
 }
