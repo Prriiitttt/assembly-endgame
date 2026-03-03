@@ -25,17 +25,17 @@ export default function Hangman() {
     <span key={index}>{letter.toUpperCase()}</span>
   ))
 
-  const alphabetChar = alphabet.split("").map((character, index) => (
-    <span key={index}>{character.toUpperCase()}</span>
+  const keyboardElements = alphabet.split("").map((letter) => (
+    <button key={letter}>{letter.toUpperCase()}</button>
   ))
 
   return (
-    <>
+    <main className="container">
       <Header />
       <Status />
       <section className="language-chips">{languageElements}</section>
       <section className="word">{letterElement}</section>
-      <section className="keyboardWord">{alphabetChar}</section>
-    </>
+      <section className="keyboardWord">{keyboardElements}</section>
+    </main>
   );
 }
