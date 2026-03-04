@@ -5,12 +5,14 @@ import Status from "./components/Status";
 import clsx from "clsx";
 
 export default function Hangman() {
-  const alphabet = "abcdefghijklmnopqrstuvwxyz";
-  const [currentWord, setCurrentWord] = useState("python");
+  const [currentWord, setCurrentWord] = useState("pythong");
   const [guessedLetters, setGuessedLetters] = useState([]);
 
-  console.log(guessedLetters);
+  const wrongGuessCount = guessedLetters.filter(letter => !currentWord.includes(letter)).length
+  console.log(wrongGuessCount)
 
+  const alphabet = "abcdefghijklmnopqrstuvwxyz";
+    
   const languageElements = languages.map((language) => {
     const styles = {
       backgroundColor: language.backgroundColor,
@@ -25,7 +27,7 @@ export default function Hangman() {
 
   const letterElement = currentWord.split("").map((letter, index) => {
     const isGuessed = guessedLetters.includes(letter);
-    return <span key={index}>{isGuessed ? letter.toUpperCase() : ""}</span>;
+    return <span key={index}>{isGuessed ? letter.toUpperCase() : ''}</span>;
   });
 
   const keyboardElements = alphabet.split("").map((letter) => {
