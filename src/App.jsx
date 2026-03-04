@@ -6,8 +6,8 @@ import clsx from "clsx";
 
 export default function Hangman() {
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
-  const [currentWord, setCurrentWord] = useState("react");
-  const [guessedLetters, setGuessedLetters] = useState("");
+  const [currentWord, setCurrentWord] = useState("python");
+  const [guessedLetters, setGuessedLetters] = useState([]);
 
   console.log(guessedLetters);
 
@@ -23,9 +23,10 @@ export default function Hangman() {
     );
   });
 
-  const letterElement = currentWord
-    .split("")
-    .map((letter, index) => <span key={index}>{letter.toUpperCase()}</span>);
+  const letterElement = currentWord.split("").map((letter, index) => {
+    const isGuessed = guessedLetters.includes(letter);
+    return <span key={index}>{isGuessed ? letter.toUpperCase() : ""}</span>;
+  });
 
   const keyboardElements = alphabet.split("").map((letter) => {
     const isGuessed = guessedLetters.includes(letter);
