@@ -5,12 +5,15 @@ import Status from "./components/Status";
 import clsx from "clsx";
 
 export default function Hangman() {
-  const [currentWord, setCurrentWord] = useState("pythong");
+  const [currentWord, setCurrentWord] = useState("abcde");
   const [guessedLetters, setGuessedLetters] = useState([]);
 
   const wrongGuessCount = guessedLetters.filter(
     (letter) => !currentWord.includes(letter),
   ).length;
+  const isGameWon = currentWord.split("").every(letter => guessedLetters.includes(letter))
+  const isGameLost = wrongGuessCount >= languages.length - 1
+  const isGameOver = isGameWon || isGameLost
 
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
 
@@ -62,12 +65,10 @@ export default function Hangman() {
     );
   }
 
-  const isGameOver = wrongGuessCount === languages.length - 1
-
   return (
     <main className="container">
       <Header />
-      <Status />
+      <Status gameWon={isGameWon} gameLost={isGameLost}/>
       <section className="language-chips">{languageElements}</section>
       <section className="word">{letterElement}</section>
       <section className="keyboardWord">{keyboardElements}</section>

@@ -42,8 +42,7 @@ header > p {
   margin: 4px;
 }
 
-.status {
-  background-color: #10a95b;
+.game-status {
   color: #f9f4da;
   border-radius: 4px;
   display: flex;
@@ -53,15 +52,29 @@ header > p {
   width: 352px;
 }
 
-.status > h2 {
+.game-status > h2 {
   font-size: 1.25rem;
   font-weight: 500;
   margin: 4px;
 }
 
-.status > p {
+.game-status > p {
   margin: 4px;
   font-size: 0.875rem;
+}
+
+.won-status {
+  background-color: #10a95b;
+}
+
+.lost-status {
+  background-color: #BA2A2A;
+}
+
+.status {
+  background-color: #262626;
+  margin-block: 30px;
+  min-height: 56px;
 }
 
 .language-chips {
