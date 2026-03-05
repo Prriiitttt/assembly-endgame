@@ -8,11 +8,12 @@ export default function Hangman() {
   const [currentWord, setCurrentWord] = useState("pythong");
   const [guessedLetters, setGuessedLetters] = useState([]);
 
-  const wrongGuessCount = guessedLetters.filter(letter => !currentWord.includes(letter)).length
-  console.log(wrongGuessCount)
+  const wrongGuessCount = guessedLetters.filter(
+    (letter) => !currentWord.includes(letter),
+  ).length;
 
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
-    
+
   const languageElements = languages.map((language, index) => {
     const isLanguageLost = index < wrongGuessCount;
     const styles = {
@@ -20,7 +21,11 @@ export default function Hangman() {
       color: language.color,
     };
     return (
-      <span key={language.name} className={`chip ${isLanguageLost ? "lost" : ""}`} style={styles}>
+      <span
+        key={language.name}
+        className={`chip ${isLanguageLost ? "lost" : ""}`}
+        style={styles}
+      >
         {language.name}
       </span>
     );
@@ -28,7 +33,7 @@ export default function Hangman() {
 
   const letterElement = currentWord.split("").map((letter, index) => {
     const isGuessed = guessedLetters.includes(letter);
-    return <span key={index}>{isGuessed ? letter.toUpperCase() : ''}</span>;
+    return <span key={index}>{isGuessed ? letter.toUpperCase() : ""}</span>;
   });
 
   const keyboardElements = alphabet.split("").map((letter) => {
@@ -57,6 +62,8 @@ export default function Hangman() {
     );
   }
 
+  const isGameOver = wrongGuessCount === languages.length - 1
+
   return (
     <main className="container">
       <Header />
@@ -64,7 +71,7 @@ export default function Hangman() {
       <section className="language-chips">{languageElements}</section>
       <section className="word">{letterElement}</section>
       <section className="keyboardWord">{keyboardElements}</section>
-      <button className="new-game">New Game</button>
+      {isGameOver && <button className="new-game">New Game</button>}
     </main>
   );
 }
