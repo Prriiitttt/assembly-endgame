@@ -13,13 +13,14 @@ export default function Hangman() {
 
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
     
-  const languageElements = languages.map((language) => {
+  const languageElements = languages.map((language, index) => {
+    const isLanguageLost = index < wrongGuessCount;
     const styles = {
       backgroundColor: language.backgroundColor,
       color: language.color,
     };
     return (
-      <span key={language.name} className="chip" style={styles}>
+      <span key={language.name} className={`chip ${isLanguageLost ? "lost" : ""}`} style={styles}>
         {language.name}
       </span>
     );
