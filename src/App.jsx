@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { languages } from "/src/languages";
+import getFarewellText  from "/src/utils";
 import Header from "./components/Header";
 import Status from "./components/Status";
 import clsx from "clsx";
@@ -11,9 +12,18 @@ export default function Hangman() {
   const wrongGuessCount = guessedLetters.filter(
     (letter) => !currentWord.includes(letter),
   ).length;
-  const isGameWon = currentWord.split("").every(letter => guessedLetters.includes(letter))
-  const isGameLost = wrongGuessCount >= languages.length - 1
-  const isGameOver = isGameWon || isGameLost
+
+  const farewellMessage = useMemo(() => {
+    const lastLostLanguage = wrongGuessCount > 0 ? languages[wrongGuessCount - 1] : null;
+    return lastLostLanguage ? getFarewellText(lastLostLanguage.name) : "";
+  }, [wrongGuessCount]);
+
+
+  const isGameWon = currentWord
+    .split("")
+    .every((letter) => guessedLetters.includes(letter));
+  const isGameLost = wrongGuessCount >= languages.length - 1;
+  const isGameOver = isGameWon || isGameLost;
 
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
 
@@ -68,7 +78,7 @@ export default function Hangman() {
   return (
     <main className="container">
       <Header />
-      <Status gameWon={isGameWon} gameLost={isGameLost}/>
+      <Status gameWon={isGameWon} gameLost={isGameLost} farewellMsg={farewellMessage}/>
       <section className="language-chips">{languageElements}</section>
       <section className="word">{letterElement}</section>
       <section className="keyboardWord">{keyboardElements}</section>
