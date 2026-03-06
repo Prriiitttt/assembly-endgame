@@ -1,12 +1,12 @@
 import { useState, useMemo } from "react";
 import { languages } from "/src/languages";
-import getFarewellText  from "/src/utils";
+import getFarewellText, { getRandomWord }  from "./utils";
 import Header from "./components/Header";
 import Status from "./components/Status";
 import clsx from "clsx";
 
 export default function Hangman() {
-  const [currentWord, setCurrentWord] = useState("abcde");
+  const [currentWord, setCurrentWord] = useState(() => getRandomWord());
   const [guessedLetters, setGuessedLetters] = useState([]);
 
   const wrongGuessCount = guessedLetters.filter(
@@ -17,7 +17,6 @@ export default function Hangman() {
     const lastLostLanguage = wrongGuessCount > 0 ? languages[wrongGuessCount - 1] : null;
     return lastLostLanguage ? getFarewellText(lastLostLanguage.name) : "";
   }, [wrongGuessCount]);
-
 
   const isGameWon = currentWord
     .split("")
@@ -61,8 +60,11 @@ export default function Hangman() {
         className={clsx("keyboard-button", {
           guessed: isGuessed,
           correct: isCorrect,
-          wrong: isWrong,
+          wrong: isWrong
         })}
+        disabled={isGameOver}
+        aria-disabled={guessedLetters.includes(letter)}
+        aria-label={`Letter ${letter}`}
       >
         {letter.toUpperCase()}
       </button>
@@ -75,6 +77,11 @@ export default function Hangman() {
     );
   }
 
+  function startNewGame() {
+    setCurrentWord(getRandomWord())
+    setGuessedLetters([])
+  }
+
   return (
     <main className="container">
       <Header />
@@ -82,7 +89,7 @@ export default function Hangman() {
       <section className="language-chips">{languageElements}</section>
       <section className="word">{letterElement}</section>
       <section className="keyboardWord">{keyboardElements}</section>
-      {isGameOver && <button className="new-game">New Game</button>}
+      {isGameOver && <button onClick={startNewGame} className="new-game">New Game</button>}
     </main>
   );
 }

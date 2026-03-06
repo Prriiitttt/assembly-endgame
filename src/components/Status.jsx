@@ -10,6 +10,8 @@ export default function Status({ gameWon, gameLost, farewellMsg }) {
         "lost-status": gameLost,
         status: !gameOver,
       })}
+      aria-live="polite"
+      role="status"
     >
       {!gameOver && farewellMsg && (
         <p className="farewell-text">{farewellMsg}</p>
