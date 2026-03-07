@@ -82,9 +82,7 @@ export default function Hangman() {
   });
 
   function addGuessedLetter(letter) {
-    const isWrongGuess = guessedLetters.filter(
-      (letter) => !currentWord.includes(letter),
-    );
+    const isWrongGuess = !currentWord.includes(letter);
 
     setGuessedLetters((prevLetters) =>
       prevLetters.includes(letter) ? prevLetters : [...prevLetters, letter],
