@@ -9,6 +9,7 @@ import Confetti from "react-confetti";
 export default function Hangman() {
   const [currentWord, setCurrentWord] = useState(() => getRandomWord());
   const [guessedLetters, setGuessedLetters] = useState([]);
+  const [isShaking, setIsShaking] = useState(false);
 
   const wrongGuessCount = guessedLetters.filter(
     (letter) => !currentWord.includes(letter),
@@ -81,30 +82,41 @@ export default function Hangman() {
   });
 
   function addGuessedLetter(letter) {
+    const isWrongGuess = guessedLetters.filter(
+      (letter) => !currentWord.includes(letter),
+    );
+
     setGuessedLetters((prevLetters) =>
       prevLetters.includes(letter) ? prevLetters : [...prevLetters, letter],
     );
+
+    if (isWrongGuess) {
+      setIsShaking(true);
+
+      setTimeout(() => {
+        setIsShaking(false);
+      }, 500);
+    }
   }
 
   function handleKeyPress(event) {
     const key = event.key;
 
-    if(isGameOver) {
+    if (isGameOver) {
       return;
     }
 
-    if(alphabet.includes(key.toLowerCase())) {
-      addGuessedLetter(key.toLowerCase())
+    if (alphabet.includes(key.toLowerCase())) {
+      addGuessedLetter(key.toLowerCase());
     }
   }
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyPress)
+    document.addEventListener("keydown", handleKeyPress);
     return () => {
-      document.removeEventListener('keydown', handleKeyPress)
-    }
-  }, [isGameOver])
-  
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [isGameOver]);
 
   function startNewGame() {
     setCurrentWord(getRandomWord());
@@ -112,12 +124,10 @@ export default function Hangman() {
   }
 
   return (
-    <main className="container">
-      {isGameWon && <Confetti
-          recycle={false}
-          numberOfPieces={1000}
-          gravity={0.3}
-      />}
+    <main className={clsx("container", { shake: isShaking })}>
+      {isGameWon && (
+        <Confetti recycle={false} numberOfPieces={1000} gravity={0.3} />
+      )}
       <Header />
       <Status
         gameWon={isGameWon}
