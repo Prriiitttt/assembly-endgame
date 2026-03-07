@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { languages } from "/src/languages";
 import getFarewellText, { getRandomWord } from "./utils";
 import Header from "./components/Header";
@@ -85,6 +85,26 @@ export default function Hangman() {
       prevLetters.includes(letter) ? prevLetters : [...prevLetters, letter],
     );
   }
+
+  function handleKeyPress(event) {
+    const key = event.key;
+
+    if(isGameOver) {
+      return;
+    }
+
+    if(alphabet.includes(key.toLowerCase())) {
+      addGuessedLetter(key.toLowerCase())
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyPress)
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress)
+    }
+  }, [isGameOver])
+  
 
   function startNewGame() {
     setCurrentWord(getRandomWord());
