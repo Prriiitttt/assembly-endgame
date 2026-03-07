@@ -100,7 +100,8 @@ export default function Hangman() {
   function handleKeyPress(event) {
     const key = event.key;
 
-    if (isGameOver) {
+    if (key === "Enter" && isGameOver) {
+      startNewGame();
       return;
     }
 
