@@ -1,9 +1,10 @@
 import { useState, useMemo } from "react";
 import { languages } from "/src/languages";
-import getFarewellText, { getRandomWord }  from "./utils";
+import getFarewellText, { getRandomWord } from "./utils";
 import Header from "./components/Header";
 import Status from "./components/Status";
 import clsx from "clsx";
+import Confetti from "react-confetti";
 
 export default function Hangman() {
   const [currentWord, setCurrentWord] = useState(() => getRandomWord());
@@ -14,7 +15,8 @@ export default function Hangman() {
   ).length;
 
   const farewellMessage = useMemo(() => {
-    const lastLostLanguage = wrongGuessCount > 0 ? languages[wrongGuessCount - 1] : null;
+    const lastLostLanguage =
+      wrongGuessCount > 0 ? languages[wrongGuessCount - 1] : null;
     return lastLostLanguage ? getFarewellText(lastLostLanguage.name) : "";
   }, [wrongGuessCount]);
 
@@ -44,8 +46,15 @@ export default function Hangman() {
   });
 
   const letterElement = currentWord.split("").map((letter, index) => {
-    const isGuessed = guessedLetters.includes(letter);
-    return <span key={index}>{isGuessed ? letter.toUpperCase() : ""}</span>;
+    const shouldRevealLetter = isGameLost || guessedLetters.includes(letter);
+    const letterClassName = clsx(
+      isGameLost && !guessedLetters.includes(letter) && "missed-letter",
+    );
+    return (
+      <span key={index} className={letterClassName}>
+        {shouldRevealLetter ? letter.toUpperCase() : ""}
+      </span>
+    );
   });
 
   const keyboardElements = alphabet.split("").map((letter) => {
@@ -60,7 +69,7 @@ export default function Hangman() {
         className={clsx("keyboard-button", {
           guessed: isGuessed,
           correct: isCorrect,
-          wrong: isWrong
+          wrong: isWrong,
         })}
         disabled={isGameOver}
         aria-disabled={guessedLetters.includes(letter)}
@@ -78,18 +87,31 @@ export default function Hangman() {
   }
 
   function startNewGame() {
-    setCurrentWord(getRandomWord())
-    setGuessedLetters([])
+    setCurrentWord(getRandomWord());
+    setGuessedLetters([]);
   }
 
   return (
     <main className="container">
+      {isGameWon && <Confetti
+          recycle={false}
+          numberOfPieces={1000}
+          gravity={0.3}
+      />}
       <Header />
-      <Status gameWon={isGameWon} gameLost={isGameLost} farewellMsg={farewellMessage}/>
+      <Status
+        gameWon={isGameWon}
+        gameLost={isGameLost}
+        farewellMsg={farewellMessage}
+      />
       <section className="language-chips">{languageElements}</section>
       <section className="word">{letterElement}</section>
       <section className="keyboardWord">{keyboardElements}</section>
-      {isGameOver && <button onClick={startNewGame} className="new-game">New Game</button>}
+      {isGameOver && (
+        <button onClick={startNewGame} className="new-game">
+          New Game
+        </button>
+      )}
     </main>
   );
 }
